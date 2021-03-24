@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Edit employee</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link type="text/css"rel="stylesheet" href="css/bootstrap.min.css" th:href="@{css/bootstrap.min.css}" />
+</head>
+<body>
+	<h1>Edit employee</h1>
+	<form th:object="${employee}" th:action="@{../save}" action="#" method="post">
+		<label for="firstname">Firstname</label>
+		<input type="text" id="firstname" th:field="*{firstname}"/>
+		
+		<label for="lastname">Lastname</label>
+		<input type="text" id="lastname" th:field="*{lastname}"/>
+		
+		<label for="dob">Date of birth</label>
+		<input type="date" id="dob" th:field="*{dob}"/>
+		
+		<label for="ssn">Social security number</label>
+		<input type="text" id="ssn" th:field="*{ssn}"/>
+		
+		<label for="streetAddress">Street address</label>
+		<input type="text" id="streetAddress" th:field="*{streetAddress}"/>
+		
+		<label for="cityAddress">City</label>
+		<input type="text" id="cityAddress" th:field="*{cityAddress}"/>
+		
+		<label for="zipcode">ZIP code</label>
+		<input type="text" id="zipcode" th:field="*{zipcode}"/>
+		
+		<label for="deplist">Department</label>
+		<select id="deplist" th:field="*{department}" class="form-control">
+			<option th:each="department : ${departments}" th:value="${department.depId}" th:text="${department.name}"></option>
+		</select>
+		
+		<input type="submit" value="Save"/>
+	</form>
+</body>
+</html>
