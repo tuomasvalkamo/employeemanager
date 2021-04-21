@@ -29,7 +29,6 @@ public class Department {
 	
 	public Department() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	// Getters and setters

@@ -1,6 +1,8 @@
 package hh.EmployeeManager.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import hh.EmployeeManager.domain.DepartmentRepository;
 import hh.EmployeeManager.domain.Employee;
 import hh.EmployeeManager.domain.EmployeeRepository;
+import hh.EmployeeManager.domain.User;
+import hh.EmployeeManager.domain.UserRepository;
 
 @Controller
 public class EmployeeController {
@@ -20,12 +24,20 @@ public class EmployeeController {
 	@Autowired
 	private DepartmentRepository depRepository;
 	
+	@Autowired
+	private UserRepository userRepository;
+	
 	// Map pages
 	
 	// Employee list page
 	@GetMapping({ "/", "/employees"} )
 	public String employeeList(Model model) {
-		model.addAttribute("employees", empRepository.findAll());
+		// Get current user
+		UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username = user.getUsername();
+		User curUser = userRepository.findByUsername(username);
+		
+		model.addAttribute("employees", empRepository.findByUser(curUser));
 		return "employees";
 	}
 	
@@ -40,7 +52,12 @@ public class EmployeeController {
 	// Save new employee
 	@PostMapping("/save")
 	public String save(Employee employee) {
-		System.out.println(employee.toString());
+		// Get current user
+		UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username = user.getUsername();
+		User curUser = userRepository.findByUsername(username);
+		// Tie current user to saved data
+		employee.setUser(curUser);
 		empRepository.save(employee);
 		return "redirect:employees";
 	}
@@ -59,6 +76,12 @@ public class EmployeeController {
 		model.addAttribute("employee", empRepository.findById(empId));
 		model.addAttribute("departments", depRepository.findAll());
 		return "editemployee";
+	}
+	
+	// Login page
+	@GetMapping("/login")
+	public String login(Model model) {
+		return "login";
 	}
 	
 	// RESTful service to get all employees

@@ -8,6 +8,8 @@
 <body>
 	<h1>Edit employee</h1>
 	<form th:object="${employee}" th:action="@{../save}" action="#" method="post">
+		<input type="hidden" id="id" th:field="*{employeeId}" />
+		
 		<label for="firstname">Firstname</label>
 		<input type="text" id="firstname" th:field="*{firstname}"/>
 		

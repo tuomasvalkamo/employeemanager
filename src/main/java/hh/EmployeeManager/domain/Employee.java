@@ -15,7 +15,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class Employee {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	private Long employeeId;
 	private String firstname;
 	private String lastname;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -27,10 +27,13 @@ public class Employee {
 	@ManyToOne
 	@JoinColumn(name = "depId")
 	private Department department;
+	@ManyToOne
+	@JoinColumn(name = "id")
+	private User user;
 	
 	// Constructors
 	public Employee(String firstname, String lastname, LocalDate dob, String ssn, String streetAddress,
-			String cityAddress, String zipcode, Department department) {
+			String cityAddress, String zipcode, Department department, User user) {
 		super();
 		this.firstname = firstname;
 		this.lastname = lastname;
@@ -40,21 +43,19 @@ public class Employee {
 		this.cityAddress = cityAddress;
 		this.zipcode = zipcode;
 		this.department = department;
+		this.user = user;
 	}
-
-
 
 	public Employee() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	// Getters and setters
-	public Long getId() {
-		return id;
+	public Long getEmployeeId() {
+		return employeeId;
 	}
-	public void setId(Long id) {
-		this.id = id;
+	public void setEmployeeId(Long employeeId) {
+		this.employeeId = employeeId;
 	}
 	public String getFirstname() {
 		return firstname;
@@ -104,10 +105,16 @@ public class Employee {
 	public void setDepartment(Department department) {
 		this.department = department;
 	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
 
 	@Override
 	public String toString() {
-		return "Employee [id=" + id + ", firstname=" + firstname + ", lastname=" + lastname + ", dob=" + dob + ", ssn="
+		return "Employee [id=" + employeeId + ", firstname=" + firstname + ", lastname=" + lastname + ", dob=" + dob + ", ssn="
 				+ ssn + ", streetAddress=" + streetAddress + ", cityAddress=" + cityAddress + ", zipcode=" + zipcode
 				+ "]";
 	}
