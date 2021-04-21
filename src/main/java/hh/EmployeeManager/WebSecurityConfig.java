@@ -17,8 +17,18 @@ import hh.EmployeeManager.web.UserDetailServiceImpl;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().anyRequest().authenticated().and().formLogin().loginPage("/login")
-				.defaultSuccessUrl("/", true).permitAll().and().logout().permitAll();
+		http
+			.authorizeRequests()
+				.antMatchers("/signup", "/saveuser").permitAll()
+				.anyRequest().authenticated()
+				.and()
+			.formLogin()
+				.loginPage("/login")
+				.defaultSuccessUrl("/", true)
+				.permitAll()
+				.and()
+			.logout()
+				.permitAll();
 	}
 
 	@Autowired

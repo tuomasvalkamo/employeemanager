@@ -1,5 +1,8 @@
 package hh.EmployeeManager.web;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import hh.EmployeeManager.domain.DepartmentRepository;
 import hh.EmployeeManager.domain.Employee;
@@ -30,7 +34,7 @@ public class EmployeeController {
 	// Map pages
 	
 	// Employee list page
-	@GetMapping({ "/", "/employees"} )
+	@GetMapping({ "/", "/employeelist"} )
 	public String employeeList(Model model) {
 		// Get current user
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -38,7 +42,7 @@ public class EmployeeController {
 		User curUser = userRepository.findByUsername(username);
 		
 		model.addAttribute("employees", empRepository.findByUser(curUser));
-		return "employees";
+		return "employeelist";
 	}
 	
 	// Add employee page
@@ -59,7 +63,7 @@ public class EmployeeController {
 		// Tie current user to saved data
 		employee.setUser(curUser);
 		empRepository.save(employee);
-		return "redirect:employees";
+		return "redirect:employeelist";
 	}
 	
 	// Delete existing employee
@@ -67,7 +71,7 @@ public class EmployeeController {
 	public String deleteEmployee(@PathVariable("id") Long empId, Model model) {
 		empRepository.deleteById(empId);
 
-		return "redirect:../employees";
+		return "redirect:../employeelist";
 	}
 	
 	// Edit existing employee
@@ -78,13 +82,15 @@ public class EmployeeController {
 		return "editemployee";
 	}
 	
-	// Login page
-	@GetMapping("/login")
-	public String login(Model model) {
-		return "login";
+	// RESTful service to get all employees
+	@GetMapping("/employees")
+	public @ResponseBody List<Employee> employeeListRest() {
+		return (List<Employee>) empRepository.findAll();
 	}
 	
-	// RESTful service to get all employees
-	
-	// RESTful service to employee by id
+	// RESTful service to get employee by id
+	@GetMapping("/employees/{id}")
+	public @ResponseBody Optional<Employee> findEmployeeRest(@PathVariable("id") Long employeeId) {
+		return empRepository.findById(employeeId);
+	}
 }

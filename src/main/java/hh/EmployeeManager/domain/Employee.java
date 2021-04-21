@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Employee {
 	@Id
@@ -28,6 +30,7 @@ public class Employee {
 	@JoinColumn(name = "depId")
 	private Department department;
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name = "id")
 	private User user;
 	
