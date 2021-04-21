@@ -26,9 +26,11 @@ public class Employee {
 	private String streetAddress;
 	private String cityAddress;
 	private String zipcode;
+	
 	@ManyToOne
 	@JoinColumn(name = "depId")
 	private Department department;
+	
 	@ManyToOne
 	@JsonIgnore
 	@JoinColumn(name = "id")
