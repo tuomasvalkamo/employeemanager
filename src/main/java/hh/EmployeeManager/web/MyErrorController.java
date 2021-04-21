@@ -21,7 +21,7 @@ public class MyErrorController implements ErrorController  {
 	    
 	        // Check if error 404
 	        if(statusCode == HttpStatus.NOT_FOUND.value()) {
-	            return "/error-404";
+	            return "/404";
 	        }
 	    }
 	    // If not error 404 return default error page
